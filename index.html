@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudStore Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* تخصيص التمرير */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* تأثيرات التحويم */
+        .file-card:hover {
+            transform: translateY(-2px);
+            transition: all 0.2s ease;
+        }
+
+        /* تأثير التحميل */
+        .upload-progress {
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- شريط التنقل الرئيسي -->
+    <nav class="bg-white shadow-sm fixed w-full z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- الشعار والعنوان -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-cloud text-blue-600 text-2xl"></i>
+                        <h1 class="text-xl font-bold text-blue-600">CloudStore Pro</h1>
+                    </div>
+                    <!-- شريط البحث المدمج -->
+                    <div class="hidden md:block">
+                        <div class="relative">
+                            <input type="text" 
+                                   placeholder="بحث سريع..." 
+                                   class="w-96 px-4 py-2 pr-10 rounded-lg bg-gray-100 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- القائمة اليمنى -->
+                <div class="flex items-center space-x-4">
+                    <!-- مؤشر المساحة -->
+                    <div class="hidden md:flex items-center bg-gray-100 px-4 py-2 rounded-lg">
+                        <div class="w-32 h-2 bg-gray-200 rounded-full mr-2">
+                            <div class="w-1/2 h-full bg-blue-500 rounded-full"></div>
+                        </div>
+                        <span class="text-sm text-gray-600">500GB/1TB</span>
+                    </div>
+                    
+                    <!-- زر الإشعارات -->
+                    <button class="relative p-2 hover:bg-gray-100 rounded-full">
+                        <i class="fas fa-bell text-gray-600"></i>
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+                    
+                    <!-- صورة المستخدم -->
+                    <button class="flex items-center space-x-2 hover:bg-gray-100 rounded-lg px-3 py-2">
+                        <img src="https://ui-avatars.com/api/?name=User&background=random" 
+                             class="w-8 h-8 rounded-full">
+                        <span class="text-sm font-medium text-gray-700">أحمد محمد</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- القائمة الجانبية والمحتوى الرئيسي -->
+    <div class="flex pt-16">
+        <!-- القائمة الجانبية -->
+        <aside class="w-64 bg-white shadow-sm h-screen fixed overflow-y-auto">
+            <div class="p-4">
+                <!-- زر الرفع الرئيسي -->
+                <button class="w-full bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mb-6 flex items-center justify-center space-x-2 transition">
+                    <i class="fas fa-upload"></i>
+                    <span>رفع ملف</span>
+                </button>
+
+                <!-- القائمة الرئيسية -->
+                <div class="space-y-1">
+                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 group transition">
+                        <i class="fas fa-home w-5 text-gray-400 group-hover:text-blue-600"></i>
+                        <span class="mr-3">الرئيسية</span>
+                    </a>
+                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 group transition">
+                        <i class="fas fa-folder w-5 text-gray-400 group-hover:text-blue-600"></i>
+                        <span class="mr-3">ملفاتي</span>
+                    </a>
+                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 group transition">
+                        <i class="fas fa-star w-5 text-gray-400 group-hover:text-blue-600"></i>
+                        <span class="mr-3">المفضلة</span>
+                    </a>
+                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 group transition">
+                        <i class="fas fa-share-alt w-5 text-gray-400 group-hover:text-blue-600"></i>
+                        <span class="mr-3">المشاركة</span>
+                    </a>
+                </div>
+
+                <!-- فاصل -->
+                <hr class="my-4 border-gray-200">
+
+                <!-- التصنيفات -->
+                <div class="space-y-1">
+                    <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">التصنيفات</h3>
+                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 group transition">
+                        <i class="fas fa-image w-5 text-green-400"></i>
+                        <span class="mr-3">الصور</span>
+                        <span class="mr-auto text-sm text-gray-400">123</span>
+                    </a>
+                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 group transition">
+                        <i class="fas fa-file-video w-5 text-purple-400"></i>
+                        <span class="mr-3">الفيديوهات</span>
+                        <span class="mr-auto text-sm text-gray-400">45</span>
+                    </a>
+                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 group transition">
+                        <i class="fas fa-file-alt w-5 text-blue-400"></i>
+                        <span class="mr-3">المستندات</span>
+                        <span class="mr-auto text-sm text-gray-400">67</span>
+                    </a>
+                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 group transition">
+                        <i class="fas fa-music w-5 text-red-400"></i>
+                        <span class="mr-3">الموسيقى</span>
+                        <span class="mr-auto text-sm text-gray-400">89</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="flex-1 mr-64 p-8">
+            <!-- مسار التنقل -->
+            <div class="flex items-center space-x-2 text-sm text-gray-600 mb-6">
+                <a href="#" class="hover:text-blue-600">الرئيسية</a>
+                <i class="fas fa-chevron-left mx-2"></i>
+                <a href="#" class="hover:text-blue-600">المستندات</a>
+                <i class="fas fa-chevron-left mx-2"></i>
+                <span class="text-gray-400">مشروع جديد</span>
+            </div>
+
+            <!-- شريط الأدوات -->
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-2">
+                    <button class="px-4 py-2 text-sm text-gray-700 bg-white rounded-lg hover:bg-gray-50 border">
+                        <i class="fas fa-th-large mr-2"></i>
+                        عرض الشبكة
+                    </button>
+                    <button class="px-4 py-2 text-sm text-gray-700 bg-white rounded-lg hover:bg-gray-50 border">
+                        <i class="fas fa-list mr-2"></i>
+                        عرض القائمة
+                    </button>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="px-4 py-2 text-sm text-gray-700 bg-white rounded-lg hover:bg-gray-50 border">
+                        <i class="fas fa-sort-amount-down mr-2"></i>
+                        الترتيب
+                    </button>
+                    <button class="px-4 py-2 text-sm text-gray-700 bg-white rounded-lg hover:bg-gray-50 border">
+                        <i class="fas fa-filter mr-2"></i>
+                        تصفية
+                    </button>
+                </div>
+            </div>
+
+            <!-- عرض الملفات -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- مجلد -->
+                <div class="file-card bg-white p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-folder text-blue-500"></i>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                    <h3 class="font-medium">مشروع جديد</h3>
+                    <p class="text-sm text-gray-500">تم التعديل قبل 2 ساعة</p>
+                </div>
+
+                <!-- ملف PDF -->
+                <div class="file-card bg-white p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-file-pdf text-red-500"></i>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                    <h3 class="font-medium">تقرير المشروع.pdf</h3>
+                    <p class="text-sm text-gray-500">2.5 MB</p>
+                </div>
+
+                <!-- صورة -->
+                <div class="file-card bg-white p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-image text-green-500"></i>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                    <h3 class="font-medium">صورة المشروع.jpg</h3>
+                    <p class="text-sm text-gray-500">1.8 MB</p>
+                </div>
+
+                <!-- ملف قيد التحميل -->
+                <div class="file-card bg-white p-4 rounded-lg shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-file-archive text-purple-500"></i>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <h3 class="font-medium">ملف جديد.zip</h3>
+                    <div class="mt-2">
+                        <div class="w-full h-1 bg-gray-200 rounded-full">
+                            <div class="upload-progress w-3/4 h-full bg-blue-500 rounded-full"></div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-1">75% - 30 ثانية متبقية</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- قائمة السياق -->
+    <div id="contextMenu" class="hidden fixed bg-white shadow-lg rounded-lg py-2 w-48 z-50">
+        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 text-sm">
+            <i class="fas fa-download mr-2 text-gray-400"></i>
+            تحميل
+        </button>
+        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 text-sm">
+            <i class="fas fa-share mr-2 text-gray-400"></i>
+            مشاركة
+        </button>
+        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 text-sm">
+            <i class="fas fa-star mr-2 text-gray-400"></i>
+            إضافة للمفضلة
+        </button>
+        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 text-sm">
+            <i class="fas fa-edit mr-2 text-gray-400"></i>
+            إعادة تسمية
+        </button>
+        <hr class="my-2 border-gray-200">
+        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 text-sm text-red-500">
+            <i class="fas fa-trash mr-2"></i>
+            حذف
+        </button>
+    </div>
+</body>
+</html> 
