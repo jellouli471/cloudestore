@@ -6,6 +6,30 @@
     <title>CloudStore Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- تكوين Tailwind والوضع المظلم -->
+    <script>
+        // التحقق من الوضع المفضل للمستخدم
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        // تكوين Tailwind
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-bg': '#1a1b1e',
+                        'dark-secondary': '#2c2d31'
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
         /* تخصيص التمرير */
         ::-webkit-scrollbar {
@@ -32,11 +56,22 @@
         .upload-progress {
             transition: width 0.3s ease;
         }
+
+        /* تخصيص التمرير للوضع المظلم */
+        .dark ::-webkit-scrollbar-track {
+            background: #2c2d31;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #4a4b50;
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #5a5b60;
+        }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-dark-bg dark:text-gray-200 transition-colors">
     <!-- شريط التنقل الرئيسي -->
-    <nav class="bg-white shadow-sm fixed w-full z-10">
+    <nav class="bg-white dark:bg-dark-secondary shadow-sm fixed w-full z-10 transition-colors">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <!-- الشعار والعنوان -->
@@ -50,7 +85,7 @@
                         <div class="relative">
                             <input type="text" 
                                    placeholder="بحث سريع..." 
-                                   class="w-96 px-4 py-2 pr-10 rounded-lg bg-gray-100 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                                   class="w-96 px-4 py-2 pr-10 rounded-lg bg-gray-100 dark:bg-dark-bg dark:text-gray-200 focus:bg-white dark:focus:bg-dark-secondary focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
                             <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                         </div>
                     </div>
@@ -59,24 +94,31 @@
                 <!-- القائمة اليمنى -->
                 <div class="flex items-center space-x-4">
                     <!-- مؤشر المساحة -->
-                    <div class="hidden md:flex items-center bg-gray-100 px-4 py-2 rounded-lg">
-                        <div class="w-32 h-2 bg-gray-200 rounded-full mr-2">
+                    <div class="hidden md:flex items-center bg-gray-100 dark:bg-dark-bg px-4 py-2 rounded-lg">
+                        <div class="w-32 h-2 bg-gray-200 dark:bg-gray-700 rounded-full mr-2">
                             <div class="w-1/2 h-full bg-blue-500 rounded-full"></div>
                         </div>
-                        <span class="text-sm text-gray-600">500GB/1TB</span>
+                        <span class="text-sm text-gray-600 dark:text-gray-400">500GB/1TB</span>
                     </div>
                     
+                    <!-- زر تبديل الوضع المظلم -->
+                    <button onclick="toggleDarkMode()" 
+                            class="p-2 hover:bg-gray-100 dark:hover:bg-dark-bg rounded-full transition-colors">
+                        <i class="fas fa-moon dark:hidden text-gray-600"></i>
+                        <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
+                    </button>
+
                     <!-- زر الإشعارات -->
-                    <button class="relative p-2 hover:bg-gray-100 rounded-full">
-                        <i class="fas fa-bell text-gray-600"></i>
+                    <button class="relative p-2 hover:bg-gray-100 dark:hover:bg-dark-bg rounded-full">
+                        <i class="fas fa-bell text-gray-600 dark:text-gray-400"></i>
                         <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
                     </button>
                     
                     <!-- صورة المستخدم -->
-                    <button class="flex items-center space-x-2 hover:bg-gray-100 rounded-lg px-3 py-2">
+                    <button class="flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-dark-bg rounded-lg px-3 py-2">
                         <img src="https://ui-avatars.com/api/?name=User&background=random" 
                              class="w-8 h-8 rounded-full">
-                        <span class="text-sm font-medium text-gray-700">أحمد محمد</span>
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">أحمد محمد</span>
                     </button>
                 </div>
             </div>
@@ -86,7 +128,7 @@
     <!-- القائمة الجانبية والمحتوى الرئيسي -->
     <div class="flex pt-16">
         <!-- القائمة الجانبية -->
-        <aside class="w-64 bg-white shadow-sm h-screen fixed overflow-y-auto">
+        <aside class="w-64 bg-white dark:bg-dark-secondary shadow-sm h-screen fixed overflow-y-auto transition-colors">
             <div class="p-4">
                 <!-- زر الرفع الرئيسي -->
                 <button class="w-full bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg mb-6 flex items-center justify-center space-x-2 transition">
@@ -96,49 +138,49 @@
 
                 <!-- القائمة الرئيسية -->
                 <div class="space-y-1">
-                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 group transition">
-                        <i class="fas fa-home w-5 text-gray-400 group-hover:text-blue-600"></i>
+                    <a href="#" class="flex items-center p-3 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 group transition-colors">
+                        <i class="fas fa-home w-5 text-gray-400 dark:text-gray-500 group-hover:text-blue-600"></i>
                         <span class="mr-3">الرئيسية</span>
                     </a>
-                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 group transition">
-                        <i class="fas fa-folder w-5 text-gray-400 group-hover:text-blue-600"></i>
+                    <a href="#" class="flex items-center p-3 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 group transition-colors">
+                        <i class="fas fa-folder w-5 text-gray-400 dark:text-gray-500 group-hover:text-blue-600"></i>
                         <span class="mr-3">ملفاتي</span>
                     </a>
-                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 group transition">
-                        <i class="fas fa-star w-5 text-gray-400 group-hover:text-blue-600"></i>
+                    <a href="#" class="flex items-center p-3 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 group transition-colors">
+                        <i class="fas fa-star w-5 text-gray-400 dark:text-gray-500 group-hover:text-blue-600"></i>
                         <span class="mr-3">المفضلة</span>
                     </a>
-                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 group transition">
-                        <i class="fas fa-share-alt w-5 text-gray-400 group-hover:text-blue-600"></i>
+                    <a href="#" class="flex items-center p-3 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 group transition-colors">
+                        <i class="fas fa-share-alt w-5 text-gray-400 dark:text-gray-500 group-hover:text-blue-600"></i>
                         <span class="mr-3">المشاركة</span>
                     </a>
                 </div>
 
                 <!-- فاصل -->
-                <hr class="my-4 border-gray-200">
+                <hr class="my-4 border-gray-200 dark:border-gray-700">
 
                 <!-- التصنيفات -->
                 <div class="space-y-1">
-                    <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">التصنيفات</h3>
-                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 group transition">
-                        <i class="fas fa-image w-5 text-green-400"></i>
+                    <h3 class="px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">التصنيفات</h3>
+                    <a href="#" class="flex items-center p-3 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 group transition-colors">
+                        <i class="fas fa-image w-5 text-green-400 dark:text-gray-500 group-hover:text-blue-600"></i>
                         <span class="mr-3">الصور</span>
-                        <span class="mr-auto text-sm text-gray-400">123</span>
+                        <span class="mr-auto text-sm text-gray-400 dark:text-gray-500">123</span>
                     </a>
-                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 group transition">
-                        <i class="fas fa-file-video w-5 text-purple-400"></i>
+                    <a href="#" class="flex items-center p-3 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 group transition-colors">
+                        <i class="fas fa-file-video w-5 text-purple-400 dark:text-gray-500 group-hover:text-blue-600"></i>
                         <span class="mr-3">الفيديوهات</span>
-                        <span class="mr-auto text-sm text-gray-400">45</span>
+                        <span class="mr-auto text-sm text-gray-400 dark:text-gray-500">45</span>
                     </a>
-                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 group transition">
-                        <i class="fas fa-file-alt w-5 text-blue-400"></i>
+                    <a href="#" class="flex items-center p-3 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 group transition-colors">
+                        <i class="fas fa-file-alt w-5 text-blue-400 dark:text-gray-500 group-hover:text-blue-600"></i>
                         <span class="mr-3">المستندات</span>
-                        <span class="mr-auto text-sm text-gray-400">67</span>
+                        <span class="mr-auto text-sm text-gray-400 dark:text-gray-500">67</span>
                     </a>
-                    <a href="#" class="flex items-center p-3 text-gray-700 rounded-lg hover:bg-blue-50 group transition">
-                        <i class="fas fa-music w-5 text-red-400"></i>
+                    <a href="#" class="flex items-center p-3 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 group transition-colors">
+                        <i class="fas fa-music w-5 text-red-400 dark:text-gray-500 group-hover:text-blue-600"></i>
                         <span class="mr-3">الموسيقى</span>
-                        <span class="mr-auto text-sm text-gray-400">89</span>
+                        <span class="mr-auto text-sm text-gray-400 dark:text-gray-500">89</span>
                     </a>
                 </div>
             </div>
@@ -147,32 +189,32 @@
         <!-- المحتوى الرئيسي -->
         <main class="flex-1 mr-64 p-8">
             <!-- مسار التنقل -->
-            <div class="flex items-center space-x-2 text-sm text-gray-600 mb-6">
+            <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 mb-6">
                 <a href="#" class="hover:text-blue-600">الرئيسية</a>
                 <i class="fas fa-chevron-left mx-2"></i>
                 <a href="#" class="hover:text-blue-600">المستندات</a>
                 <i class="fas fa-chevron-left mx-2"></i>
-                <span class="text-gray-400">مشروع جديد</span>
+                <span class="text-gray-400 dark:text-gray-500">مشروع جديد</span>
             </div>
 
             <!-- شريط الأدوات -->
             <div class="flex justify-between items-center mb-6">
                 <div class="flex items-center space-x-2">
-                    <button class="px-4 py-2 text-sm text-gray-700 bg-white rounded-lg hover:bg-gray-50 border">
+                    <button class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-dark-secondary rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 border dark:border-gray-700">
                         <i class="fas fa-th-large mr-2"></i>
                         عرض الشبكة
                     </button>
-                    <button class="px-4 py-2 text-sm text-gray-700 bg-white rounded-lg hover:bg-gray-50 border">
+                    <button class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-dark-secondary rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 border dark:border-gray-700">
                         <i class="fas fa-list mr-2"></i>
                         عرض القائمة
                     </button>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <button class="px-4 py-2 text-sm text-gray-700 bg-white rounded-lg hover:bg-gray-50 border">
+                    <button class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-dark-secondary rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 border dark:border-gray-700">
                         <i class="fas fa-sort-amount-down mr-2"></i>
                         الترتيب
                     </button>
-                    <button class="px-4 py-2 text-sm text-gray-700 bg-white rounded-lg hover:bg-gray-50 border">
+                    <button class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-dark-secondary rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 border dark:border-gray-700">
                         <i class="fas fa-filter mr-2"></i>
                         تصفية
                     </button>
@@ -182,63 +224,63 @@
             <!-- عرض الملفات -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 <!-- مجلد -->
-                <div class="file-card bg-white p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer">
+                <div class="file-card bg-white dark:bg-dark-secondary p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-all">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center transition-colors">
                             <i class="fas fa-folder text-blue-500"></i>
                         </div>
-                        <button class="text-gray-400 hover:text-gray-600">
+                        <button class="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
                             <i class="fas fa-ellipsis-v"></i>
                         </button>
                     </div>
-                    <h3 class="font-medium">مشروع جديد</h3>
-                    <p class="text-sm text-gray-500">تم التعديل قبل 2 ساعة</p>
+                    <h3 class="font-medium dark:text-gray-200">مشروع جديد</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">تم التعديل قبل 2 ساعة</p>
                 </div>
 
                 <!-- ملف PDF -->
-                <div class="file-card bg-white p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer">
+                <div class="file-card bg-white dark:bg-dark-secondary p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-all">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                        <div class="w-10 h-10 bg-red-100 dark:bg-red-900/50 rounded-lg flex items-center justify-center transition-colors">
                             <i class="fas fa-file-pdf text-red-500"></i>
                         </div>
-                        <button class="text-gray-400 hover:text-gray-600">
+                        <button class="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
                             <i class="fas fa-ellipsis-v"></i>
                         </button>
                     </div>
-                    <h3 class="font-medium">تقرير المشروع.pdf</h3>
-                    <p class="text-sm text-gray-500">2.5 MB</p>
+                    <h3 class="font-medium dark:text-gray-200">تقرير المشروع.pdf</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">2.5 MB</p>
                 </div>
 
                 <!-- صورة -->
-                <div class="file-card bg-white p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer">
+                <div class="file-card bg-white dark:bg-dark-secondary p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-all">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                        <div class="w-10 h-10 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center transition-colors">
                             <i class="fas fa-image text-green-500"></i>
                         </div>
-                        <button class="text-gray-400 hover:text-gray-600">
+                        <button class="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
                             <i class="fas fa-ellipsis-v"></i>
                         </button>
                     </div>
-                    <h3 class="font-medium">صورة المشروع.jpg</h3>
-                    <p class="text-sm text-gray-500">1.8 MB</p>
+                    <h3 class="font-medium dark:text-gray-200">صورة المشروع.jpg</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">1.8 MB</p>
                 </div>
 
                 <!-- ملف قيد التحميل -->
-                <div class="file-card bg-white p-4 rounded-lg shadow-sm">
+                <div class="file-card bg-white dark:bg-dark-secondary p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-all">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/50 rounded-lg flex items-center justify-center transition-colors">
                             <i class="fas fa-file-archive text-purple-500"></i>
                         </div>
-                        <button class="text-gray-400 hover:text-gray-600">
+                        <button class="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <h3 class="font-medium">ملف جديد.zip</h3>
+                    <h3 class="font-medium dark:text-gray-200">ملف جديد.zip</h3>
                     <div class="mt-2">
-                        <div class="w-full h-1 bg-gray-200 rounded-full">
-                            <div class="upload-progress w-3/4 h-full bg-blue-500 rounded-full"></div>
+                        <div class="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full">
+                            <div class="upload-progress w-3/4 h-full bg-blue-500 dark:bg-blue-900/50 rounded-full"></div>
                         </div>
-                        <p class="text-sm text-gray-500 mt-1">75% - 30 ثانية متبقية</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">75% - 30 ثانية متبقية</p>
                     </div>
                 </div>
             </div>
@@ -246,28 +288,56 @@
     </div>
 
     <!-- قائمة السياق -->
-    <div id="contextMenu" class="hidden fixed bg-white shadow-lg rounded-lg py-2 w-48 z-50">
-        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 text-sm">
-            <i class="fas fa-download mr-2 text-gray-400"></i>
+    <div id="contextMenu" class="hidden fixed bg-white dark:bg-dark-secondary shadow-lg rounded-lg py-2 w-48 z-50 transition-colors">
+        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm dark:text-gray-200 transition-colors">
+            <i class="fas fa-download mr-2 text-gray-400 dark:text-gray-500"></i>
             تحميل
         </button>
-        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 text-sm">
-            <i class="fas fa-share mr-2 text-gray-400"></i>
+        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm dark:text-gray-200 transition-colors">
+            <i class="fas fa-share mr-2 text-gray-400 dark:text-gray-500"></i>
             مشاركة
         </button>
-        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 text-sm">
-            <i class="fas fa-star mr-2 text-gray-400"></i>
+        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm dark:text-gray-200 transition-colors">
+            <i class="fas fa-star mr-2 text-gray-400 dark:text-gray-500"></i>
             إضافة للمفضلة
         </button>
-        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 text-sm">
-            <i class="fas fa-edit mr-2 text-gray-400"></i>
+        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm dark:text-gray-200 transition-colors">
+            <i class="fas fa-edit mr-2 text-gray-400 dark:text-gray-500"></i>
             إعادة تسمية
         </button>
-        <hr class="my-2 border-gray-200">
-        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 text-sm text-red-500">
-            <i class="fas fa-trash mr-2"></i>
+        <hr class="my-2 border-gray-200 dark:border-gray-700">
+        <button class="w-full text-right px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm dark:text-gray-200 transition-colors text-red-500">
+            <i class="fas fa-trash mr-2 text-gray-400 dark:text-gray-500"></i>
             حذف
         </button>
     </div>
+
+    <!-- JavaScript -->
+    <script>
+        // دالة تبديل الوضع المظلم
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark')
+                localStorage.theme = 'light'
+            } else {
+                document.documentElement.classList.add('dark')
+                localStorage.theme = 'dark'
+            }
+        }
+
+        // دالة إظهار قائمة السياق
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            const contextMenu = document.getElementById('contextMenu');
+            contextMenu.style.left = e.pageX + 'px';
+            contextMenu.style.top = e.pageY + 'px';
+            contextMenu.classList.remove('hidden');
+        });
+
+        // إخفاء قائمة السياق عند النقر في أي مكان
+        document.addEventListener('click', function() {
+            document.getElementById('contextMenu').classList.add('hidden');
+        });
+    </script>
 </body>
 </html> 
